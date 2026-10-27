@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction | Property Estimator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page-shell">
+        <section class="estimator-card">
+            <header class="page-header">
+                <div>
+                    <p class="eyebrow">PROPERTY ESTIMATOR</p>
+                    <h1>Enter Property Details</h1>
+                    <p class="subtitle">Add the property details below to estimate its market price.</p>
+                </div>
+                <div class="brand-mark" aria-label="AI property estimator">
+                    <span>ANN</span>
+                    <small>AI</small>
+                </div>
+            </header>
+
+            {% if error %}
+                <div class="alert alert-error" role="alert">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST" class="property-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="total_sqft">Total area <span class="unit">(sq. ft.)</span></label>
+                        <input id="total_sqft" type="number" name="total_sqft"
+                               min="1" step="any" placeholder="e.g. 1200"
+                               inputmode="decimal" required>
+                        <small class="field-hint">Enter the property's total area.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bhk">BHK</label>
+                        <input id="bhk" type="number" name="bhk" min="1" step="1"
+                               placeholder="e.g. 2" required>
+                        <small class="field-hint">Number of bedrooms, hall and kitchen.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bath">Bathrooms</label>
+                        <input id="bath" type="number" name="bath" min="1" step="1"
+                               placeholder="e.g. 2" required>
+                        <small class="field-hint">Total number of bathrooms.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="balcony">Balcony</label>
+                        <input id="balcony" type="number" name="balcony" min="0" step="1"
+                               placeholder="e.g. 1" required>
+                        <small class="field-hint">Enter 0 if there is no balcony.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="area_type">Area type</label>
+                        <select id="area_type" name="area_type" required>
+                            <option value="Super built-up  Area">Super built-up Area</option>
+                            <option value="Built-up  Area">Built-up Area</option>
+                            <option value="Plot  Area">Plot Area</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group location-group">
+                        <label for="location">Location</label>
+                        <input list="locations" id="location" name="location"
+                               placeholder="Search Bengaluru location..." autocomplete="off" required>
+                        <datalist id="locations">
+                            {% for location in locations %}
+                                <option value="{{ location }}">
+                            {% endfor %}
+                        </datalist>
+                        <small class="field-hint">Choose a location from the suggestions.</small>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    <span>Predict House Price</span>
+                    <span class="button-arrow" aria-hidden="true">→</span>
+                </button>
+                <p class="privacy-note">Estimate is based on the details you provide.</p>
+            </form>
+
+            {% if prediction %}
+                <section class="prediction" aria-live="polite">
+                    <p class="prediction-label">ESTIMATED PROPERTY PRICE</p>
+                    <h2>₹{{ prediction }} <span>Lakhs</span></h2>
+                </section>
+            {% endif %}
+        </section>
+        <footer class="page-footer">AI-based House Price Prediction and Property Recommendation System</footer>
+    </main>
+</body>
+</html>
